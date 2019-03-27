@@ -42,9 +42,6 @@ public class PointBean
 
             service.savePoint(point);
 
-            List<Point> list = (List<Point>) req.getSession().getAttribute("points");
-            list.add(point);
-
             resp.sendRedirect("http://localhost:4200/main");
         }
         catch (Exception e)
@@ -60,9 +57,9 @@ public class PointBean
             return Response.ok(service.getAllPoints()).header("Access-Control-Allow-Origin", "*").build();
     }
 
-    @HEAD
+    @GET
     @Path("/addpoint")
-    public void addPoint(@QueryParam("X") double x, @QueryParam("Y") double y, @QueryParam("R") double r)
+    public Response addPoint(@QueryParam("x") double x, @QueryParam("y") double y, @QueryParam("r") double r)
     {
         try
         {
@@ -71,10 +68,12 @@ public class PointBean
             point.setHit(hit);
 
             service.savePoint(point);
+            return Response.ok().header("Access-Control-Allow-Origin", "*").build();
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
+        return  Response.status(Response.Status.NOT_FOUND).header("Access-Control-Allow-Origin", "*").build();
     }
 }
