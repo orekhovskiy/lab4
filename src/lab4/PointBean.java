@@ -5,7 +5,6 @@ import java.util.List;
 import javax.ejb.*;
 import javax.faces.bean.SessionScoped;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -27,27 +26,6 @@ public class PointBean
         if (x <=0 && y <= 0 && x*x + y*y <= r*r / 4) return true;
         if (x <= 0 && y >=0 && -x + y <= r) return true;
         return false;
-    }
-
-    @POST
-    @Path("/check")
-    public void check(@FormParam("X") double x, @FormParam("Y") double y, @FormParam("R") double r,
-                      @Context HttpServletRequest req, @Context HttpServletResponse resp)
-    {
-        try
-        {
-            Point point = new Point(x, y, r);
-            boolean hit = checkHit(point);
-            point.setHit(hit);
-
-            service.savePoint(point);
-
-            resp.sendRedirect("http://localhost:4200/main");
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
     }
 
     @GET
